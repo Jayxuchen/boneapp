@@ -17,7 +17,7 @@ def getPronounciation(sentence):
 
 # adjusts the sounds of words
 def changeSounds(inputString):
-	print(inputString)
+	#print(inputString)
 	changedClusters = {	"aa" : " a", 
 						"ae" : " a", 
 						"ah" : " uh",
@@ -53,7 +53,8 @@ def changeSounds(inputString):
 			tempString += " ."
 			old = -1
 		firstLetter = False
-	print(tempString)
+	
+	#print(tempString)
 	return tempString
 
 # first change of splitting up the letters in the words differently
@@ -120,7 +121,7 @@ def checkSplitsForRepetition(inputString, splitString):
 						if ind != -1:
 							splitString = splitString[:newWordArr[indexNew][1]-2] + splitString[newWordArr[indexNew][1]:ind] + " . " + splitString[ind+1:]
 
-	print(splitString)
+	#print(splitString)
 	return splitString
 
 # input: a string of words separated by periods
@@ -143,9 +144,10 @@ def buildWordList(phrase):
 
 
 def printList(ll):
+	s = ""
 	for x in ll: 
-		print(x, end = " ")
-	print()
+		s += x + " "
+	return s
 
 # input: a string (sound)
 # output: the top string with frequency (f) above 3.5
@@ -180,9 +182,13 @@ def convert(inputPhrase):
 	
 	phrase = phrase.replace(" ", "")
 	words = realWords(phrase.strip(".").split("."))
-	printList(words)
+	return printList(words)
+
+def phraseConvert(phrase):
+	phoneticPhrase = getPronounciation(phrase)
+	madGabPhrase = convert(phoneticPhrase)
+	return madGabPhrase
 
 if __name__ == "__main__":
 	phrase = input("Enter your phrase: ")
-	phoneticPhrase = getPronounciation(phrase)
-	madGabPhrase = convert(phoneticPhrase)
+	print(phraseConvert(phrase))
