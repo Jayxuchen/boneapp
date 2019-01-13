@@ -3,8 +3,14 @@ import mysql.connector
 import configparser
 #https://pleasval.org/wp-content/uploads/2017/12/2017-2018-school-spelling-bee-study-list-by-grade-watermark.pdf
 
+#set up db credentials
 config = configparser.ConfigParser()
 config.read("db.conf")
+user = config['CREDENTIALS']['user']
+passw = config['CREDENTIALS']['pass']
+cnx = mysql.connector.connect(user=user, password=passw, host='127.0.0.1', database='boneapp')
+cursor = cnx.cursor()
+
 word_fn = "words_8_dict.txt"
 word_fp = open(word_fn)
 # app_id = 'ca72a05b'
@@ -22,7 +28,9 @@ for line in word_fp:
     # print("code {}\n".format(r.status_code))
     # print("text \n" + r.text)
     # print("json \n" + json.dumps(r.json()))
-    cnx = mysql.connector.connect(user='root', password='',
-                              host='127.0.0.1',
-                              database='')
-                              cnx.close()
+
+    query = "INSERT into words VALUES (NULL,%s,%s,NULL,NULL)"
+    print(query)
+    cursor.execute(query,word,pronunciation)
+cursor.close()
+cnx.close()
