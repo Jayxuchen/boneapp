@@ -7,7 +7,7 @@
 // }
 
 function saveInput() {
-	if (document.getElementById("check").innerHTML == "New Phrase!") {
+			if (document.getElementById("check").innerHTML == "New Phrase!") {
 
     	document.getElementById("result1").innerHTML= "A Screwdriver";
     	document.getElementById("result2").innerHTML= "Ask Rude Arrive Her";
@@ -18,13 +18,28 @@ function saveInput() {
     document.getElementById("result2").style.visibility = "visible";
     document.getElementById("check").innerText= "New Phrase!";
     document.getElementById("userInput").value = '';
-    //document.getElementById("check").setAttribute("onClick", "javascript: newWord();");
-    
-
-    	// document.getElementById("userInput").style.border="3.5px solid #85e085";
-    	// document.getElementById("incorrect").style.display = "none";
-    	// document.getElementById("correct").style.display = "block";
     	// document.getElementById("userInput").style.border="3.5px solid #ff4d4d";
     	// document.getElementById("correct").style.display = "none";
     	// document.getElementById("incorrect").style.display = "block";
+}
+	
+
+function madGab() {
+	var input = document.getElementById("userInput").value;
+	document.getElementById("userInput").value = '';
+	 $.ajax({
+    url: '/getPhrase?phrase='+input,
+    type: 'GET',
+    contentType: "application/json",
+    // data: {
+    //     phrase: input
+    // },
+    success: function(data) {
+        console.log(data);
+        document.getElementById("result1").innerHTML= input;
+        document.getElementById("result2").innerHTML= data;
+        document.getElementById("result1").style.visibility = "visible";
+    	document.getElementById("result2").style.visibility = "visible";
+    }
+  });
 }
