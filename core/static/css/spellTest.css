@@ -60,6 +60,22 @@ section h3.section-subheading {
   }
 }
 
+#correct {
+  display: none;
+}
+
+#incorrect {
+  display: none;
+}
+
+/*.error {
+  border:2px solid red;
+}
+
+.success {
+  border:2px solid #aeeaae;
+}*/
+
 .userInput {
   font-size: 20px;
   padding-left: 10px;
@@ -72,8 +88,7 @@ section h3.section-subheading {
 
 .btn-user {
   font-size: 20px;
-  padding: 5px 5px;
-  padding-left: 10px;
+  padding: 5px 10px 5px;
   margin-left: 30px;
   margin-bottom: 5px;
 }

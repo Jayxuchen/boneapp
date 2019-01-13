@@ -1,7 +1,11 @@
 function saveInput() {
     var input = document.getElementById("userInput").value;
     if (input == "egregious") {
-    	alert("correct");
+    	document.getElementById("userInput").style.border="3.5px solid #85e085";
+    	document.getElementById("check").style.text = "New Word";
     }
-    else alert("incorrect");
+    else {
+    	document.getElementById("userInput").style.border="3.5px solid #ff4d4d";
+    	text.style.display("wrong");
+    }
 }
