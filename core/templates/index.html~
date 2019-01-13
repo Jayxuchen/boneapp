@@ -21,7 +21,7 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
     <!-- Custom styles for this template -->
-    <link href="static/css/agency.min.css" rel="stylesheet">
+    <link href="static/css/agency.css" rel="stylesheet">
 
   </head>
 
@@ -60,11 +60,13 @@
     <!-- Header -->
     <header class="masthead">
       <div class="container">
-        <div class="intro-text">
-          <div class="intro-lead-in">Let's Start Practicing!</div>
-          <div class="intro-heading text-uppercase">Spelling Quiz</div>
-          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Begin</a>
-        </div>
+		{% block content %}
+        <!-- <div class="intro-text"> -->
+        <!--   <div class="intro-lead-in">Let's Start Practicing!</div> -->
+        <!--   <div class="intro-heading text-uppercase">Spelling Quiz</div> -->
+        <!--   <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Begin</a> -->
+        <!-- </div> -->
+		{% endblock %}
       </div>
     </header>
 
