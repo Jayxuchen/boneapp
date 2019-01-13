@@ -1,7 +1,14 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    return render_template('home.html')
 
+@app.route('/result')
+def result():
+    return render_template('result.html')
+
+@app.route('/spellTest')
+def spellTest():
+    return render_template('spellTest.html')
