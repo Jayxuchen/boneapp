@@ -58,7 +58,6 @@ def changeSounds(inputString):
 
 # first change of splitting up the letters in the words differently
 def splitWords(inputString):
-	#print("FUNC: splitWords")
 	newString = inputString
 	if newString.find(' ') == -1:
 		sys.exit("no spaces in phonetic string, word is weird 1")
@@ -91,22 +90,12 @@ def splitWords(inputString):
 
 		vowelReached = False #reset vowelReached variable for every loop
 
-	#newString = newString.replace(" ", "") # these two lines get rid of excess whitespace
-	#"".join(newString.split())
-
 	return newString
 
 def checkSplitsForRepetition(inputString, splitString):
-	#print ("FUNC: checkSplits")
 	tempInputString = inputString
 	tempSplitString = splitString
 	tempInputString = tempInputString.lower().replace("  ", " ").replace("aa", "a")
-
-	#tempSplitString = tempSplitString.replace(" ", "") # get rid of excess whitespace
-	#"".join(tempSplitString.split())
-
-	#tempInputString = tempInputString.replace(" ", "") # these two lines get rid of excess whitespace
-	#"".join(tempInputString.split())
 
 	originalWordArr = buildWordList(tempInputString)
 	newWordArr = buildWordList(tempSplitString)
