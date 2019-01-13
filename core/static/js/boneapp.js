@@ -7,16 +7,19 @@
 // }
 
 function saveInput() {
+	if (document.getElementById("check").innerHTML == "New Phrase!") {
+
+    	document.getElementById("result1").innerHTML= "A Screwdriver";
+    	document.getElementById("result2").innerHTML= "Ask Rude Arrive Her";
+    }
+	
     var input = document.getElementById("userInput").value;
+    document.getElementById("result1").style.visibility = "visible";
+    document.getElementById("result2").style.visibility = "visible";
     document.getElementById("check").innerText= "New Phrase!";
     document.getElementById("userInput").value = '';
     //document.getElementById("check").setAttribute("onClick", "javascript: newWord();");
-    document.getElementById("result1").style.visibility = "visible";
-    document.getElementById("result2").style.visibility = "visible";
-
-    	
-    	document.getElementById("result1").innerHTML= "A Screwdriver";
-    	document.getElementById("result2").innerHTML= "Ask Rude Arrive Her";
+    
 
     	// document.getElementById("userInput").style.border="3.5px solid #85e085";
     	// document.getElementById("incorrect").style.display = "none";
