@@ -11,7 +11,7 @@ def getPronounciation(sentence):
     response = http.request('GET', url)
     soup = BeautifulSoup(response, 'html.parser')
     soup = BeautifulSoup(response.data)
-    tt = soup.findAll("div", class_= "")
-    print(tt)
+    text = soup.div.findAll()[-1].get_text()
+    return text
 
-getPronounciation("this")
+getPronounciation("hello world")
