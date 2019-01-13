@@ -60,6 +60,10 @@ section h3.section-subheading {
   }
 }
 
+#result {
+  display: none;
+}
+
 #correct {
   display: none;
 }
