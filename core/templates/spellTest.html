@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block content %}
+	<div class="intro-text"> 
+	  <div class="intro-lead-in">Your Word: IH G R IY JH AH S</div>
+	  
+	  <p>
+		<input id="userInput" class="userInput" type="text" placeholder="Input">
+		<a id="check" class="btn btn-user btn-primary text-uppercase" onclick="saveInput()">Check</a>
+	  </p>
+	  <div id="incorrect">Sorry, but the correct answer is egregious.</div>
+	  <div id="correct">Good work! Try another one.</div>
+	</div>
+{% endblock %}
+
+
