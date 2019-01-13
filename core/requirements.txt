@@ -1,0 +1,6 @@
+Python version: python3.5.2
+Pip version: pip 8.1.1 (for python 3.5)
+pip libraries:
+urllib3
+beautifulsoup4
+mysql-connector-python-rf
