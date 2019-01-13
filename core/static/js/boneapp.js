@@ -28,6 +28,8 @@ function madGab() {
 	var input = document.getElementById("userInput").value;
 	document.getElementById("userInput").value = '';
 	document.getElementById("reveal").style.display = "block";
+	document.getElementById("result1").style.visibility = "hidden";
+    document.getElementById("result2").style.visibility = "hidden";
 	 $.ajax({
     url: '/getPhrase?phrase='+input,
     type: 'GET',
@@ -41,7 +43,7 @@ function madGab() {
         document.getElementById("result2").innerHTML= data;
         document.getElementById("result1").style.visibility = "hidden";
     	document.getElementById("result2").style.visibility = "visible";
-    }
+	}
   });
 }
 
