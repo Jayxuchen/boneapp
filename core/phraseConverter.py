@@ -3,6 +3,7 @@ import sys
 from bs4 import BeautifulSoup
 import urllib3
 
+# web scrapes the CMU Dictionary website
 def getPronounciation(sentence):
 	base="http://www.speech.cs.cmu.edu/cgi-bin/cmudict?in="
 	for word in sentence.split(" "):
@@ -13,23 +14,24 @@ def getPronounciation(sentence):
 	soup = BeautifulSoup(response.data, features='html.parser')
 	text = soup.div.findAll()[-1].get_text()
 	return text
-'''
+
+# adjusts the sounds of words
 def changeSounds(inputString):
 	print(inputString)
-	changedClusters = {	"aa" : "a", 
-						"ae" : "a", 
-						"ah" : "uh",
-						"ao" : "aw",
-						"aw" : "ow",
-						"ay" : "ie",
-						"dh" : "th",
-						"iy" : "ee",
-						"hh" : "h",
-						"ey" : "ay",
-						"jh" : "jj", 
-						"ow" : "oa",
-						"uh" : "oo",  
-						"uw" : "oo"
+	changedClusters = {	"aa" : " a", 
+						"ae" : " a", 
+						"ah" : " uh",
+						"ao" : " aw",
+						"aw" : " ou",
+						"ay" : " ie",
+						"dh" : " th",
+						"iy" : " ee",
+						"hh" : " h",
+						"ey" : " ay",
+						"jh" : " jj", 
+						"ow" : " oa",
+						"uh" : " oo",  
+						"uw" : " oo"
 					}
 	old = 0
 	tempString = ""
@@ -37,19 +39,24 @@ def changeSounds(inputString):
 	while old != -1:
 		new = inputString.find(' ', old+1) #takes the index of the next space
 		if new != -1:
-			if (firstLetter and new - old == 2) or (not firstLetter and new - old == 3 and inputString[old+1:new] in changedClusters):
-				tempString += changedClusters.get(inputString[old:new])
-				print(tempString)
+			
+			if (firstLetter and new - old == 2 and inputString[old:new] in changedClusters) or (not firstLetter and new - old == 3 and inputString[old+1:new] in changedClusters):
+				
+				if firstLetter:
+					tempString += changedClusters.get(inputString[old:new])
+				else:
+					tempString += changedClusters.get(inputString[old+1:new])
 			else:
 				tempString += inputString[old:new]
 			old = new
-			firstLetter = False
 		else:
 			tempString += " ."
 			old = -1
+		firstLetter = False
 	print(tempString)
 	return tempString
-'''
+
+# first change of splitting up the letters in the words differently
 def splitWords(inputString):
 	#print("FUNC: splitWords")
 	newString = inputString
@@ -88,7 +95,63 @@ def splitWords(inputString):
 	#"".join(newString.split())
 
 	return newString
-    
+
+def checkSplitsForRepetition(inputString, splitString):
+	#print ("FUNC: checkSplits")
+	tempInputString = inputString
+	tempSplitString = splitString
+	tempInputString = tempInputString.lower().replace("  ", " ").replace("aa", "a")
+
+	#tempSplitString = tempSplitString.replace(" ", "") # get rid of excess whitespace
+	#"".join(tempSplitString.split())
+
+	#tempInputString = tempInputString.replace(" ", "") # these two lines get rid of excess whitespace
+	#"".join(tempInputString.split())
+
+	originalWordArr = buildWordList(tempInputString)
+	newWordArr = buildWordList(tempSplitString)
+
+	#print(originalWordArr)
+	#print(newWordArr)
+
+	vowels = ['a','e','i','o','u','y'] #included 'y' in vowels
+
+	ind = 0
+
+	for indexNew in range(len(newWordArr)):
+		for indexOld in range(len(originalWordArr)):
+			if originalWordArr[indexOld][0] == newWordArr[indexNew][0]:
+				if originalWordArr[indexOld][1] - indexOld == newWordArr[indexNew][1] - indexNew:
+					if indexNew != 0 and newWordArr[indexNew][0][1] in vowels:
+						ind = splitString.rfind(' ', 0, newWordArr[indexNew][1] - 2)
+						if ind != -1:
+							splitString = splitString[:ind] + " . " + splitString[ind+1:newWordArr[indexNew][1] - 2] + splitString[newWordArr[indexNew][1]:]
+					elif indexNew != 0 and newWordArr[indexNew][0][1] not in vowels:
+						ind = splitString.find(' ', newWordArr[indexNew][1]+1)
+						if ind != -1:
+							splitString = splitString[:newWordArr[indexNew][1]-2] + splitString[newWordArr[indexNew][1]:ind] + " . " + splitString[ind+1:]
+
+	print(splitString)
+	return splitString
+
+# input: a string of words separated by periods
+# output: an array of words
+def buildWordList(phrase):
+    words = []        # add sounds one by one into this words list, empty list for now
+    temp = ""
+    counter = 0
+    prevIndex = counter
+    for c in phrase:    # assumes phrase has a period at the end of the string
+        if c == '.':
+            cluster = [temp, prevIndex]
+            words.append(cluster)
+            prevIndex = counter+1
+            temp = "" 
+        else: 
+            temp += c
+        counter += 1
+    return words
+
 
 def printList(ll):
 	for x in ll: 
@@ -103,7 +166,7 @@ def apicall(x):
 	jdata = r.json()
 	for x in jdata:
 		frequency = float(x["tags"][0][2:])
-		if (frequency > 1.5): 
+		if (frequency > 2): 
 			return x["word"]
 	return "error"
 
@@ -118,10 +181,14 @@ def realWords(words):
 
 # input: phonetic sound, already put into CMU
 # output: mad gab phrase
-def convert(phrase):
-	phrase = splitWords(phrase)     # shirlyn's function to rearrange the periods and split up the sounds differently
-	# add method *here* that shirlyn is working on
-	#phrase = changeSounds(phrase)
+def convert(inputPhrase):
+	inputPhrase = inputPhrase.lower()
+	inputPhrase = changeSounds(inputPhrase)
+
+	phrase = inputPhrase
+	phrase = splitWords(inputPhrase)     # shirlyn's function to rearrange the periods and split up the sounds differently
+	phrase = checkSplitsForRepetition(inputPhrase, phrase)
+	
 	phrase = phrase.replace(" ", "")
 	words = realWords(phrase.strip(".").split("."))
 	printList(words)
@@ -130,5 +197,3 @@ if __name__ == "__main__":
 	phrase = input("Enter your phrase: ")
 	phoneticPhrase = getPronounciation(phrase)
 	madGabPhrase = convert(phoneticPhrase)
-
-	#poet solids good
