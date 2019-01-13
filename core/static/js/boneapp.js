@@ -27,6 +27,7 @@ function saveInput() {
 function madGab() {
 	var input = document.getElementById("userInput").value;
 	document.getElementById("userInput").value = '';
+	document.getElementById("reveal").style.display = "block";
 	 $.ajax({
     url: '/getPhrase?phrase='+input,
     type: 'GET',
@@ -38,8 +39,13 @@ function madGab() {
         console.log(data);
         document.getElementById("result1").innerHTML= input;
         document.getElementById("result2").innerHTML= data;
-        document.getElementById("result1").style.visibility = "visible";
+        document.getElementById("result1").style.visibility = "hidden";
     	document.getElementById("result2").style.visibility = "visible";
     }
   });
+}
+
+function reveal() {
+	document.getElementById("reveal").style.display = "none";
+	document.getElementById("result1").style.visibility = "visible";
 }

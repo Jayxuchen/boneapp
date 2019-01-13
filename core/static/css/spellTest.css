@@ -68,6 +68,15 @@ section h3.section-subheading {
   visibility: hidden;
 }
 
+#reveal {
+  display: none;
+  width: 300px;
+  text-align: center;
+  margin-left: 400px;
+}
+
+
+
 .userInput {
   font-size: 20px;
   padding-left: 10px;
