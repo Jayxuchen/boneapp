@@ -21,4 +21,4 @@ Mad Gab Generator does not target our service to children under 18, and we do no
 ## Senpais
 **Dev Team: Cynthia Zhang, Felix Zhao, Jason Chen, Shirlyn Tang, Tony Sun**
 
-Created at SBHacks 2019
+Created at [SBHacks 2019](https://devpost.com/software/mad-gab-generator)
