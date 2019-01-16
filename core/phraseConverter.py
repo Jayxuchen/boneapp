@@ -1,25 +1,37 @@
+#!/usr/bin/python3
 import requests
 import sys
 from bs4 import BeautifulSoup
 import urllib3
+import re
+import MySQLdb
+import configparser
 
 # web scrapes the CMU Dictionary website
+config = configparser.ConfigParser()
+config.read("db.conf")
+user = config['CREDENTIALS']['user']
+passw = config['CREDENTIALS']['pass']
+
 def getPronounciation(sentence):
-	base="http://www.speech.cs.cmu.edu/cgi-bin/cmudict?in="
-	for word in sentence.split(" "):
-		base+=word+"+"
-	url=base[:-1]
-	http = urllib3.PoolManager()
-	response = http.request('GET', url)
-	soup = BeautifulSoup(response.data, features='html.parser')
-	text = soup.div.findAll()[-1].get_text()
-	return text
+	cnx = MySQLdb.connect(user=user, password=passw, host='127.0.0.1', db='boneapp')
+	cursor = cnx.cursor()
+	# print(sentence)
+	sentence = sentence.strip().split(" ")
+	ret = ''
+	for word in sentence:
+		query = "SELECT pronunciation FROM words WHERE word=%s"
+		cursor.execute(query,(word.upper(),))
+		ret+=cursor.fetchone()[0]+" . "
+	cursor.close()
+	cnx.close()
+	return ret.strip()
 
 # adjusts the sounds of words
 def changeSounds(inputString):
 	#print(inputString)
-	changedClusters = {	"aa" : " a", 
-						"ae" : " a", 
+	changedClusters = {	"aa" : " a",
+						"ae" : " a",
 						"ah" : " uh",
 						"ao" : " aw",
 						"aw" : " ou",
@@ -28,9 +40,9 @@ def changeSounds(inputString):
 						"iy" : " ee",
 						"hh" : " h",
 						"ey" : " ay",
-						"jh" : " jj", 
+						"jh" : " jj",
 						"ow" : " oa",
-						"uh" : " oo",  
+						"uh" : " oo",
 						"uw" : " oo"
 					}
 	old = 0
@@ -39,9 +51,9 @@ def changeSounds(inputString):
 	while old != -1:
 		new = inputString.find(' ', old+1) #takes the index of the next space
 		if new != -1:
-			
+
 			if (firstLetter and new - old == 2 and inputString[old:new] in changedClusters) or (not firstLetter and new - old == 3 and inputString[old+1:new] in changedClusters):
-				
+
 				if firstLetter:
 					tempString += changedClusters.get(inputString[old:new])
 				else:
@@ -53,7 +65,7 @@ def changeSounds(inputString):
 			tempString += " ."
 			old = -1
 		firstLetter = False
-	
+
 	#print(tempString)
 	return tempString
 
@@ -136,8 +148,8 @@ def buildWordList(phrase):
             cluster = [temp, prevIndex]
             words.append(cluster)
             prevIndex = counter+1
-            temp = "" 
-        else: 
+            temp = ""
+        else:
             temp += c
         counter += 1
     return words
@@ -145,7 +157,7 @@ def buildWordList(phrase):
 
 def printList(ll):
 	s = ""
-	for x in ll: 
+	for x in ll:
 		s += x + " "
 	return s
 
@@ -157,7 +169,7 @@ def apicall(x):
 	jdata = r.json()
 	for x in jdata:
 		frequency = float(x["tags"][0][2:])
-		if (frequency > 2): 
+		if (frequency > 2):
 			return x["word"]
 	return "error"
 
@@ -179,7 +191,7 @@ def convert(inputPhrase):
 	phrase = inputPhrase
 	phrase = splitWords(inputPhrase)     # shirlyn's function to rearrange the periods and split up the sounds differently
 	phrase = checkSplitsForRepetition(inputPhrase, phrase)
-	
+
 	phrase = phrase.replace(" ", "")
 	words = realWords(phrase.strip(".").split("."))
 	return printList(words)
