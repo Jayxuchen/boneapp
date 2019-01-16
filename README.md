@@ -9,8 +9,9 @@ the Mad Gab Generator allows you to create customized mad gab phrases from any s
 
 ## How to set up database
 
-1. Enter "core/db.conf" with your mysql database credentials
-2. import database with this command:
+1. "cp ./core/config.sample ./core/db.conf"
+2. Modify "db.conf" with your mysql database credentials
+3. import database with this command:
     -"mysql -u username -p -h localhost boneapp < ./scripts/db_scripts/data.sql"
 
 ## How to run on a local host
