@@ -12,9 +12,11 @@ config = configparser.ConfigParser()
 config.read("db.conf")
 user = config['CREDENTIALS']['user']
 passw = config['CREDENTIALS']['pass']
-
+db = config['CREDENTIALS']['db']
+host = config['CREDENTIALS']['host']
+cnx = MySQLdb.connect(user=user, password=passw,host=host, db=db)
 def getPronounciation(sentence):
-	cnx = MySQLdb.connect(user=user, password=passw,host="us-cdbr-iron-east-01.cleardb.net", db='boneapp')
+	print("start")
 	cursor = cnx.cursor()
 	# print(sentence)
 	sentence = sentence.strip().split(" ")
@@ -23,10 +25,11 @@ def getPronounciation(sentence):
 		query = "SELECT pronunciation FROM words WHERE word=%s"
 		cursor.execute(query,(word.upper(),))
 		ret+=cursor.fetchone()[0]+" . "
-	cursor.close()
-	cnx.close()
-	return ret.strip()
 
+	print("end")
+	# cursor.close()
+	# cnx.close()
+	return ret.strip()
 # adjusts the sounds of words
 def changeSounds(inputString):
 	#print(inputString)
