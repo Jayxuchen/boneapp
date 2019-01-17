@@ -14,7 +14,7 @@ user = config['CREDENTIALS']['user']
 passw = config['CREDENTIALS']['pass']
 
 def getPronounciation(sentence):
-	cnx = MySQLdb.connect(user=user, password=passw,server="us-cdbr-iron-east-01.cleardb.net", db='boneapp')
+	cnx = MySQLdb.connect(user=user, password=passw,host="us-cdbr-iron-east-01.cleardb.net", db='boneapp')
 	cursor = cnx.cursor()
 	# print(sentence)
 	sentence = sentence.strip().split(" ")
